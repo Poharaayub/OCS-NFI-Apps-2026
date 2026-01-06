@@ -120,44 +120,106 @@ iframe{
   margin-top:12px;
 }
 
-/* ===== BOTTOM BAR ===== */
+/* ===== MATERIAL 3 NAV BAR FINAL ===== */
 .bottom-bar{
-  height:72px;
+  height:80px;
   background:var(--surface);
   border-top:1px solid var(--surface-variant);
   display:flex;
   justify-content:space-around;
   align-items:center;
+  padding:0 6px;
 }
 
+/* ITEM */
 .menu-item{
   flex:1;
-  text-align:center;
+  height:72px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
   font-size:12px;
-  color:#666;
+  color:#5f6368;
   cursor:pointer;
-  transition:color .25s ease;
+  position:relative;
+  border-radius:24px;
+  overflow:hidden;
+  transition:color .2s ease, transform .15s ease;
 }
 
-.menu-item .material-symbols-rounded{
-  display:block;
-  font-size:26px;
-  margin-bottom:2px;
-  transition:transform .25s ease;
+/* ICON CONTAINER */
+.icon-wrap{
+  width:56px;
+  height:32px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .25s ease;
 }
 
+.material-symbols-rounded{
+  font-size:24px;
+  transition:transform .2s ease, color .2s ease;
+}
+
+.label{
+  line-height:1;
+}
+
+/* ACTIVE STATE */
 .menu-item.active{
   color:var(--primary);
 }
 
-.menu-item.active .material-symbols-rounded{
-  transform:translateY(-6px) scale(1.15);
+.menu-item.active .icon-wrap{
+  background:var(--primary-container);
 }
 
+.menu-item.active .material-symbols-rounded{
+  color:var(--primary);
+}
+
+/* PRESS SCALE */
+.menu-item:active{
+  transform:scale(.96);
+}
+
+/* ICON PRESS */
 .menu-item:active .material-symbols-rounded{
   transform:scale(.9);
 }
 
+/* RIPPLE */
+.menu-item::after{
+  content:"";
+  position:absolute;
+  width:140px;
+  height:140px;
+  background:rgba(103,80,164,.18);
+  border-radius:50%;
+  transform:scale(0);
+  opacity:0;
+  pointer-events:none;
+}
+
+.menu-item:active::after{
+  transform:scale(1.6);
+  opacity:1;
+  transition:0s;
+}
+
+/* ACTIVE MICRO ANIMATION */
+.menu-item.active .icon-wrap{
+  animation:pop .25s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(.85)}
+  to{transform:scale(1)}
+}
 /* ===== BOTTOM SHEET POPUP ===== */
 .bottom-sheet-overlay{
   position:fixed;
@@ -229,19 +291,38 @@ iframe{
 
 <div class="bottom-bar">
   <div class="menu-item active" onclick="setActive(this,'Job Desk')">
-    <span class="material-symbols-rounded">calendar_month</span>Job Desk
+    <div class="icon-wrap">
+      <span class="material-symbols-rounded">calendar_month</span>
+    </div>
+    Job Desk
   </div>
+
   <div class="menu-item" onclick="setActive(this,'Laporan')">
-    <span class="material-symbols-rounded">description</span>Laporan
+    <div class="icon-wrap">
+      <span class="material-symbols-rounded">description</span>
+    </div>
+    Laporan
   </div>
+
   <div class="menu-item" onclick="setActive(this,'Beranda')">
-    <span class="material-symbols-rounded">home</span>Beranda
+    <div class="icon-wrap">
+      <span class="material-symbols-rounded">home</span>
+    </div>
+    Beranda
   </div>
+
   <div class="menu-item" onclick="setActive(this,'Absensi')">
-    <span class="material-symbols-rounded">fact_check</span>Absensi
+    <div class="icon-wrap">
+      <span class="material-symbols-rounded">fact_check</span>
+    </div>
+    Absensi
   </div>
+
   <div class="menu-item" onclick="setActive(this,'Lainnya')">
-    <span class="material-symbols-rounded">apps</span>Lainnya
+    <div class="icon-wrap">
+      <span class="material-symbols-rounded">apps</span>
+    </div>
+    Lainnya
   </div>
 </div>
 
