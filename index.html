@@ -332,7 +332,7 @@ iframe{
 <div class="bottom-sheet" id="membersSheet">
   <span class="material-symbols-rounded close-btn" onclick="closeSheet()">close</span>
   <h2>All Members</h2>
-  <p class="subtitle">Daftar Anggota OCS NFI 26</p>
+  <p class="subtitle">Klik di nama member untuk menghubungi via whatsapp</p>
   <div class="buttons" id="membersButtons"></div>
 </div>
 
@@ -362,7 +362,7 @@ iframe{
 
 <div class="bottom-sheet" id="updateSheet">
   <span class="material-symbols-rounded close-btn" onclick="closeSheet()">close</span>
-  <h2>Update ke Team Leader</h2>
+  <h2>Upload ke Team Leader</h2>
   <div class="buttons" id="updateButtons"></div>
 </div>
 
@@ -598,7 +598,10 @@ function generateToolsButtons(){
   const btns = [
     ['build','Data peralatan & alat bantu kerja','link','https://docs.google.com/spreadsheets/d/16F8PvkiDaDY_ZyIfkf0K0eeXwPvDelRSSgAeCl292fk/edit?usp=drivesdk'],
     ['add','Request peralatan/alat bantu kerja','link','https://wa.me/6285281587927?text=Assalamualaikum%20pak%20Sadulloh%2C%20saya%20ingin%20request%20peralatan%2F%20alat%20bantu%20kerja%20dengan%20rincian%20sebagai%20berikut%0A%0ANama%20peralatan%3A%0AJumlah%3A%0AUntuk%20digunakan%20diarea%3A%0A%0ADemikian%20terimakasih'],
-    ['report_problem','Laporkan kerusakan peralatan/alat bantu kerja','link','https://wa.me/6289637126728?text=Assalamualaikum%20pak%20Ayub%2C%20saya%20ingin%20melaporkan%20kerusakan%20peralatan%2F%20alat%20bantu%20kerja%20dengan%20rincian%20sebagai%20berikut%0A%0ANama%20peralatan%3A%0AKerusakan%20dibagian%3A%0AKronologi%20kerusakan%3A%0A%0ADemikian%20terimakasih']
+    ['report_problem','Laporkan kerusakan peralatan/alat bantu kerja','link','https://wa.me/6289637126728?text=Assalamualaikum%20pak%20Ayub%2C%20saya%20ingin%20melaporkan%20kerusakan%20peralatan%2F%20alat%20bantu%20kerja%20dengan%20rincian%20sebagai%20berikut%0A%0ANama%20peralatan%3A%0AKerusakan%20dibagian%3A%0AKronologi%20kerusakan%3A%0A%0ADemikian%20terimakasih'],
+
+    // Tombol baru: Data pemakaian detergen
+    ['local_laundry_service','Data pemakaian detergen','link','https://docs.google.com/spreadsheets/d/11IqbMX3eR3mWIV-i5KZAeFWTb9gNmh1OwDmfqXGLfW8/edit?usp=drivesdk']
   ];
 
   toolsBtns.innerHTML = btns.map(b=>`
