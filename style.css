@@ -1,0 +1,93 @@
+:root {
+  --primary: #6750A4;
+  --primary-container: #EADDFF;
+  --surface: #FFFBFE;
+  --surface-variant: #E7E0EC;
+  --on-surface: #1C1B1F;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: system-ui, Roboto, sans-serif;
+  background: var(--surface);
+  color: var(--on-surface);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, p, button { text-align: left; text-transform: capitalize; }
+.subtitle { font-size: 14px; color: #555; }
+
+/* CONTENT */
+.content { flex: 1; padding: 16px; overflow-y: auto; }
+
+/* BUTTONS */
+.buttons { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+.buttons button {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 14px 16px; border: none;
+  border-radius: var(--radius); background: var(--primary-container);
+  color: var(--primary); font-size: 15px; font-weight: 500; cursor: pointer;
+}
+
+/* IFRAME */
+iframe { width: 100%; height: 85vh; border: none; border-radius: 12px; margin-top: 12px; }
+
+/* BOTTOM BAR (STYLING KAPSUL TANPA ANIMASI) */
+.bottom-bar {
+  height: 80px;
+  background: var(--surface);
+  border-top: 1px solid var(--surface-variant);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.menu-item {
+  flex: 1;
+  height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #5f6368;
+  cursor: pointer;
+}
+
+/* KAPSUL (ICON WRAP) */
+.icon-wrap {
+  width: 56px;
+  height: 32px;
+  border-radius: 16px; /* Bentuk Kapsul */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: none; /* Hilangkan animasi transisi */
+}
+
+/* KEADAAN AKTIF TANPA RIPPLE/POP */
+.menu-item.active { color: var(--primary); font-weight: 600; }
+.menu-item.active .icon-wrap { background: var(--primary-container); }
+.material-symbols-rounded { font-size: 24px; }
+
+/* BOTTOM SHEET */
+.bottom-sheet-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  opacity: 0; visibility: hidden; z-index: 1000; transition: opacity .2s;
+}
+.bottom-sheet-overlay.show { opacity: 1; visibility: visible; }
+
+.bottom-sheet {
+  position: fixed; left: 0; right: 0; bottom: -100%;
+  background: var(--surface); border-radius: 24px 24px 0 0;
+  padding: 16px; max-height: 70%; overflow-y: auto;
+  transition: bottom .3s ease-out; z-index: 1001;
+}
+.bottom-sheet.show { bottom: 0; }
+.close-btn { position: absolute; top: 16px; right: 16px; cursor: pointer; }
