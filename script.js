@@ -17,13 +17,19 @@ function setActive(el, menu) {
 
   let btns = [];
   if(menu === 'Beranda') {
-    btns = [
-      ['campaign', 'Update informasi terbaru', 'link', 'https://docs.google.com/document/d/1xBx-CVQ4K1lBEaIKjaKhmesfO8q3LyXs4rhQqH-ymPQ/edit?usp=drivesdk'],
-      ['call', 'Hubungi pak Ayub', 'link', 'https://wa.me/6289637126728'],
-      ['call', 'Hubungi pak Sadulloh', 'link', 'https://wa.me/6285281587927'],
-      ['groups', 'All Members', 'members']
-    ];
-  }
+  btns = [
+    ['download', 'Download OCS NFI Apps 26', 'link',
+     'https://drive.google.com/file/d/1kTBmccjjSEjbIAP8e-LWyb4Fytd0itrC/view?usp=drivesdk'
+    ],
+
+    ['campaign', 'Update informasi terbaru', 'link',
+     'https://docs.google.com/document/d/1xBx-CVQ4K1lBEaIKjaKhmesfO8q3LyXs4rhQqH-ymPQ/edit?usp=drivesdk'
+    ],
+    ['call', 'Hubungi pak Ayub', 'link', 'https://wa.me/6289637126728'],
+    ['call', 'Hubungi pak Sadulloh', 'link', 'https://wa.me/6285281587927'],
+    ['groups', 'All Members', 'members']
+  ];
+}
   if(menu === 'Laporan') {
     btns = [
       ['download', 'Download Kamstamwa', 'link', 'https://drive.google.com/file/d/1Rhy1s2R5G0QdilOMmbiQ5AhgaSuvtsWQ/view?usp=drivesdk'],
