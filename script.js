@@ -10,10 +10,13 @@ function setActive(el, menu) {
   if(menu === 'Job Desk') {
     c.innerHTML = `
       <h1>Job Desk</h1>
-      <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQBJaRSwf1ki6YLILhX1jfc8lntgZYa2WtnM8vFmskFgEhQo4L89xWIBt4f12wVO8egkAyO-rdO4hRr/pubhtml"></iframe>
+      <iframe src="https://poharaayub.github.io/OCS-NFI-Apps-26-Job-Desk/" style="width:100%; height:calc(100vh - 150px); border:none;"></iframe>
     `;
     return;
   }
+  
+  // ... sisa kode btns lainnya tetap sama
+
 
   let btns = [];
   if(menu === 'Beranda') {
