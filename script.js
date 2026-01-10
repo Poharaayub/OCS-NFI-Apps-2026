@@ -52,7 +52,7 @@ function setActive(el, menu) {
       ['warehouse', 'Laporan Warehouse Tepung', 'link', 'https://docs.google.com/spreadsheets/d/1C9Zrywvi_ggnHnKHB9fxUU9f-DCWaGNFJflKqbHVEnI/edit?usp=drivesdk'],
       ['inventory', 'Laporan Pencucian Pallet', 'link', 'https://docs.google.com/spreadsheets/d/13dPCq4lEhV4PRA4z2RLQEmPbOIBK9emuclkxk-Dh7iU/edit?usp=drivesdk']
     ];
-    } else if(menu === 'Absensi') {
+  } else if(menu === 'Absensi') {
     // Template Pesan Tukar Shift
     const pesanTukar = encodeURIComponent(
       "Assalamualaikum, saya ingin mengajukan tukar shift\n\n" +
@@ -69,7 +69,6 @@ function setActive(el, menu) {
       ['assignment', 'Penilaian Karyawan', 'link', 'https://docs.google.com/spreadsheets/d/1o3yFehBFjD7SDgmJqRqlbl36nv77uS8EiqUVMLoc3DA/edit?usp=drivesdk'],
       ['warning', 'Surat Peringatan (SP)', 'link', 'https://drive.google.com/drive/folders/10JcMB3LGNLOL84YjRa2R-Fp7toZR_v2y']
     ];
-
   } else if(menu === 'Lainnya') {
     btns = [
       ['article', 'Job Desk Teks Generator', 'link', 'https://poharaayub.github.io/grup-jod-desk-input/'],
@@ -140,20 +139,18 @@ function openMembersSheet() {
 }
 
 function openAbsenSheet() { 
-  // Membuat format pesan izin dengan baris baru (\n)
-  const formatPesan = encodeURIComponent(
+  const pesanIzin = encodeURIComponent(
     "Assalamualaikum, saya ingin mengajukan izin absensi\n\n" +
-    "Keperluan mengajukan izin:\n" +
+    "Keperluan mengajukan izin:\n\n" +
     "Izin untuk berapa hari:\n\n" +
     "Demikian terimakasih"
   );
 
   renderAndShow('absenSheet', 'absenButtons', [
-    ['mail', 'Izin ke pak Ayub', `https://wa.me/6289637126728?text=${formatPesan}`],
-    ['mail', 'Izin ke pak Sadulloh', `https://wa.me/6285281587927?text=${formatPesan}`]
+    ['mail','Izin ke pak Ayub',`https://wa.me/6289637126728?text=${pesanIzin}`],
+    ['mail','Izin ke pak Sadulloh',`https://wa.me/6285281587927?text=${pesanIzin}`]
   ]);
 }
-
 
 function openKasSheet() {
   renderAndShow('kasSheet', 'kasButtons', [
@@ -164,13 +161,32 @@ function openKasSheet() {
 }
 
 function openToolsSheet() {
+  // Template Pesan Lapor Kerusakan
+  const pesanKerusakan = encodeURIComponent(
+    "Assalamualaikum, saya ingin melaporkan kerusakan peralatan/ alat bantu kerja dengan rincian sebagai berikut\n\n" +
+    "Nama peralatan:\n" +
+    "Kerusakan dibagian:\n" +
+    "Kronologi kerusakan:\n\n" +
+    "Demikian terimakasih"
+  );
+
+  // Template Pesan Request Alat Baru
+  const pesanRequest = encodeURIComponent(
+    "Assalamualaikum, saya ingin request peralatan/ alat bantu kerja dengan rincian sebagai berikut\n\n" +
+    "Nama peralatan/ alat bantu kerja:\n" +
+    "Jumlah request:\n" +
+    "Untuk digunakan diarea:\n\n" +
+    "Demikian terimakasih"
+  );
+
   renderAndShow('toolsSheet', 'toolsButtons', [
-    ['build','Data Peralatan','https://docs.google.com/spreadsheets/d/16F8PvkiDaDY_ZyIfkf0K0eeXwPvDelRSSgAeCl292fk/edit?usp=drivesdk'],
-    ['report_problem','Lapor Kerusakan Alat','https://wa.me/6289637126728'],
-    ['add','Request Alat Baru','https://wa.me/6285281587927'],
-    ['local_laundry_service','Pemakaian Detergen','https://docs.google.com/spreadsheets/d/11IqbMX3eR3mWIV-i5KZAeFWTb9gNmh1OwDmfqXGLfW8/edit?usp=drivesdk']
+    ['build', 'Data Peralatan', 'https://docs.google.com/spreadsheets/d/16F8PvkiDaDY_ZyIfkf0K0eeXwPvDelRSSgAeCl292fk/edit?usp=drivesdk'],
+    ['report_problem', 'Lapor Kerusakan Alat', `https://wa.me/6289637126728?text=${pesanKerusakan}`],
+    ['add', 'Request Alat Baru', `https://wa.me/6285281587927?text=${pesanRequest}`],
+    ['local_laundry_service', 'Pemakaian Detergen', 'https://docs.google.com/spreadsheets/d/11IqbMX3eR3mWIV-i5KZAeFWTb9gNmh1OwDmfqXGLfW8/edit?usp=drivesdk']
   ]);
 }
+
 
 function openUpdateSheet() {
   renderAndShow('updateSheet', 'updateButtons', [
@@ -179,7 +195,9 @@ function openUpdateSheet() {
   ]);
 }
 
-function openAboutSheet() { showSheet('aboutSheet'); }
+function openAboutSheet() { 
+  showSheet('aboutSheet'); 
+}
 
 // 5. UTILITY
 function renderAndShow(sheetId, containerId, data) {
