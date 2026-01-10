@@ -49,7 +49,7 @@ function setActive(el, menu) {
       ['share', 'WhatsApp Grup OCS NFI', 'link', 'https://chat.whatsapp.com/KnxTC4uGQdGI6WAAVh0UGg'],
       ['person', 'Upload ke Team Leader', 'update'],
       ['local_laundry_service', 'Laporan Pencucian Box', 'link', 'https://docs.google.com/spreadsheets/d/1vf2pzwlvdsm17cyo1Zrc6DBUL4EeQOng5uJjU12aYvg/edit?usp=drivesdk'],
-      ['warehouse', 'Laporan Warehouse Tepung', 'link', 'https://docs.google.com/spreadsheets/d/1C9Zrywvi_ggnHnKHB9fxUU9f-DCWaGNFJflKqbHVEnI/edit?usp=drivesdk'],
+      ['warehouse', 'Laporan Pembersihan Pallet Warehouse Tepung', 'link', 'https://docs.google.com/spreadsheets/d/1C9Zrywvi_ggnHnKHB9fxUU9f-DCWaGNFJflKqbHVEnI/edit?usp=drivesdk'],
       ['inventory', 'Laporan Pencucian Pallet', 'link', 'https://docs.google.com/spreadsheets/d/13dPCq4lEhV4PRA4z2RLQEmPbOIBK9emuclkxk-Dh7iU/edit?usp=drivesdk']
     ];
   } else if(menu === 'Absensi') {
