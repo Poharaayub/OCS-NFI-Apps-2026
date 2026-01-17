@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OCS NFI APPS 26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    
+    <style>
+        :root {
+          --m3-surface: #141218;
+          --m3-surface-container: #211F26;
+          --m3-primary: #D0BCFF;
+          --m3-on-primary: #381E72;
+          --m3-primary-container: #4F378B;
+          --m3-on-primary-container: #EADDFF;
+          --m3-secondary-container: #332F37;
+          --m3-on-surface: #E6E1E5;
+          --m3-on-surface-variant: #CAC4D0;
+          --radius-pill: 100px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          background-color: var(--m3-surface);
+          color: var(--m3-on-surface);
+          height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes navActive {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes labelFadeUp {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-page { animation: pageIn 0.4s cubic-bezier(0.2, 0, 0, 1) forwards; }
+
+        .page-header { flex-shrink: 0; padding: 24px 20px 12px 20px; }
+        .page-header h1 { font-size: 28px; font-weight: 700; }
+        .page-header p { font-size: 14px; color: var(--m3-on-surface-variant); margin-top: 4px; }
+
+        .content { flex: 1; overflow-y: auto; scrollbar-width: none; position: relative; }
+        .content::-webkit-scrollbar { display: none; }
+        .page-padding { padding: 8px 16px 140px 16px; }
+
+        .full-frame-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
+            padding-bottom: 100px;
+        }
+        .full-frame-container iframe {
+            width: 100%; height: 100%; border: none;
+        }
+
+        .buttons { display: flex; flex-direction: column; gap: 12px; }
+        .buttons button {
+          display: flex; align-items: center; gap: 16px; width: 100%; padding: 14px 16px; 
+          border: none; border-radius: 20px; 
+          background: var(--m3-surface-container); color: var(--m3-on-surface); 
+          font-size: 15px; font-weight: 600; transition: 0.2s; cursor: pointer; text-align: left;
+        }
+        .buttons button:active { background: var(--m3-secondary-container); transform: scale(0.97); }
+        .buttons button span.material-symbols-rounded {
+          color: var(--m3-on-primary-container); background: var(--m3-primary-container);
+          width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+          border-radius: 12px; flex-shrink: 0;
+        }
+
+        .bottom-bar {
+          position: fixed; bottom: 20px; left: 16px; right: 16px; height: 80px;
+          background: rgba(29, 27, 32, 0.95); backdrop-filter: blur(20px);
+          display: flex; align-items: center; justify-content: center;
+          border-radius: var(--radius-pill); z-index: 1000;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        .menu-item { 
+          flex: 1; display: flex; flex-direction: column; align-items: center; 
+          justify-content: center; gap: 4px; height: 100%; 
+          color: var(--m3-on-surface-variant); cursor: pointer;
+          transition: color 0.3s ease;
+        }
+        .nav-pill { 
+          width: 56px; height: 32px; border-radius: var(--radius-pill); 
+          display: flex; align-items: center; justify-content: center; 
+          transition: all 0.4s cubic-bezier(0.2, 0, 0, 1); 
+        }
+        
+        .menu-item.active .nav-pill { 
+            background: var(--m3-primary); 
+            color: var(--m3-on-primary); 
+            width: 64px;
+            animation: navActive 0.4s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .menu-item.active .nav-label { 
+            animation: labelFadeUp 0.4s ease-out forwards;
+            color: var(--m3-on-surface);
+        }
+        .menu-item.active { color: var(--m3-on-surface); }
+        .nav-label { font-size: 11px; font-weight: 700; transition: all 0.3s ease; }
+
+        .sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 2000; backdrop-filter: blur(4px); }
+        .sheet-overlay.show { display: block; }
+        .bottom-sheet { 
+            position: fixed; left: 0; right: 0; bottom: -100%; 
+            background: var(--m3-surface-container); border-radius: 28px 28px 0 0; 
+            max-height: 94dvh; transition: bottom 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); 
+            z-index: 2001; display: flex; flex-direction: column; padding-bottom: 20px;
+        }
+        .bottom-sheet.show { bottom: 0; }
+        .sheet-handle { width: 32px; height: 4px; background: #49454F; border-radius: 2px; margin: 16px auto; flex-shrink: 0; }
+        .sheet-body { padding: 0 20px 20px 20px; overflow-y: auto; flex: 1; }
+
+        .webview-container { width: 100%; height: 70dvh; border-radius: 16px; overflow: hidden; background: #fff; margin-top: 10px; }
+        .webview-container iframe { width: 100%; height: 100%; border: none; }
+        
+        .btn-open-ext {
+            width: 42px; height: 42px; border-radius: 12px; 
+            background: var(--m3-secondary-container); color: var(--m3-primary);
+            border: none; display: flex; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<header class="page-header" id="header-ui">
+    <h1 id="title-text">Beranda</h1>
+    <p id="subtitle-text">Halo Tim OCS NFI</p>
+</header>
+
+<main class="content" id="main-content"></main>
+
+<nav class="bottom-bar">
+    <div class="menu-item" onclick="setActive(this,'Job Desk')">
+        <div class="nav-pill"><span class="material-symbols-rounded">event_repeat</span></div>
+        <span class="nav-label">Job</span>
+    </div>
+    <div class="menu-item" onclick="setActive(this,'Laporan')">
+        <div class="nav-pill"><span class="material-symbols-rounded">description</span></div>
+        <span class="nav-label">Laporan</span>
+    </div>
+    <div class="menu-item" id="default-menu" onclick="setActive(this,'Beranda')">
+        <div class="nav-pill"><span class="material-symbols-rounded">home</span></div>
+        <span class="nav-label">Home</span>
+    </div>
+    <div class="menu-item" onclick="setActive(this,'Absensi')">
+        <div class="nav-pill"><span class="material-symbols-rounded">fact_check</span></div>
+        <span class="nav-label">Absen</span>
+    </div>
+    <div class="menu-item" onclick="setActive(this,'Lainnya')">
+        <div class="nav-pill"><span class="material-symbols-rounded">apps</span></div>
+        <span class="nav-label">Lainnya</span>
+    </div>
+</nav>
+
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+<div class="bottom-sheet" id="standardSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-body" id="sheetContent"></div>
+</div>
+
+<script>
+    function vibrate() { if(navigator.vibrate) navigator.vibrate(15); }
+
+    // Logika tambahan untuk handle tombol kembali fisik
+    window.addEventListener('popstate', function(event) {
+        const sheet = document.getElementById('standardSheet');
+        if (sheet.classList.contains('show')) {
+            closeSheet(false); // Tutup sheet tanpa memicu history.back lagi
+        }
+    });
+
+    function setActive(el, menu) {
+        vibrate();
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        
+        const content = document.getElementById('main-content');
+        const header = document.getElementById('header-ui');
+        content.scrollTop = 0;
+
+        if(menu === 'Job Desk') {
+            header.style.display = 'none';
+            content.innerHTML = `
+                <div class="full-frame-container animate-page">
+                    <iframe src="https://poharaayub.github.io/OCS-NFI-Apps-26-Job-Desk/"></iframe>
+                </div>`;
+            return;
+        }
+
+        header.style.display = 'block';
+        document.getElementById('title-text').innerText = menu;
+        
+        let btns = [];
+        if(menu === 'Beranda') {
+            document.getElementById('subtitle-text').innerText = "Akses cepat menu beranda";
+            btns = [
+                ['download', 'Download OCS NFI Apps 26', 'link', 'https://drive.google.com/file/d/1kTBmccjjSEjbIAP8e-LWyb4Fytd0itrC/view?usp=drivesdk'],
+                ['campaign', 'Update Informasi Terbaru', 'link', 'https://docs.google.com/document/d/1xBx-CVQ4K1lBEaIKjaKhmesfO8q3LyXs4rhQqH-ymPQ/edit?usp=drivesdk'],
+                ['call', 'Hubungi pak Ayub', 'link', 'https://wa.me/6289637126728'],
+                ['call', 'Hubungi pak Sadulloh', 'link', 'https://wa.me/6285281587927'],
+                ['groups', 'Semua Anggota Tim', 'members']
+            ];
+        } else if(menu === 'Laporan') {
+            document.getElementById('subtitle-text').innerText = "Akses cepat menu laporan";
+            btns = [
+                ['download', 'Download Kamstamwa', 'link', 'https://drive.google.com/file/d/1Rhy1s2R5G0QdilOMmbiQ5AhgaSuvtsWQ/view?usp=drivesdk'],
+                ['download', 'Download Cam To PDF', 'link', 'https://drive.google.com/uc?id=105kaVbODYTpiGii9At-0kAPCHPkltyS4'],
+                ['picture_as_pdf', 'Before After to PDF', 'link', 'https://poharaayub.github.io/Before-After-PDF/'],
+                ['article', 'Laporan Kehadiran Teks', 'link', 'https://poharaayub.github.io/laporan-kehadiran-clipboard-generator/'],
+                ['share', 'WhatsApp Grup OCS NFI', 'link', 'https://chat.whatsapp.com/KnxTC4uGQdGI6WAAVh0UGg'],
+                ['person', 'Upload ke Team Leader', 'update'],
+                ['local_laundry_service', 'Laporan Pencucian Box', 'report', 'https://docs.google.com/spreadsheets/d/1vf2pzwlvdsm17cyo1Zrc6DBUL4EeQOng5uJjU12aYvg/preview'],
+                ['warehouse', 'Laporan Pembersihan Pallet', 'report', 'https://docs.google.com/spreadsheets/d/1C9Zrywvi_ggnHnKHB9fxUU9f-DCWaGNFJflKqbHVEnI/preview'],
+                ['inventory', 'Laporan Pencucian Pallet', 'report', 'https://docs.google.com/spreadsheets/d/13dPCq4lEhV4PRA4z2RLQEmPbOIBK9emuclkxk-Dh7iU/preview']
+            ];
+        } else if(menu === 'Absensi') {
+            document.getElementById('subtitle-text').innerText = "Akses cepat menu absensi";
+            const pesanTukar = encodeURIComponent("Assalamualaikum, saya ingin mengajukan tukar shift\n\nKeperluan mengajukan tukaran shift:\nShift sebelumnya:\n\nDemikian terimakasih");
+            btns = [
+                ['apps', 'Greatday Apps', 'link', 'https://app.greatdayhr.com/'],
+                ['summarize', 'Rekapitulasi Absensi', 'link', 'https://drive.google.com/drive/folders/1o0sr3Ee6r4VOCGT_a-1dTJ-KVZ0GMX-J'],
+                ['mail', 'Ajukan Izin Absensi', 'absen'],
+                ['swap_horiz', 'Ajukan Tukar Shift', 'link', `https://wa.me/6289637126728?text=${pesanTukar}`],
+                ['assignment', 'Penilaian Karyawan', 'report', 'https://docs.google.com/spreadsheets/d/1o3yFehBFjD7SDgmJqRqlbl36nv77uS8EiqUVMLoc3DA/preview'],
+                ['warning', 'Surat Peringatan (SP)', 'link', 'https://drive.google.com/drive/folders/10JcMB3LGNLOL84YjRa2R-Fp7toZR_v2y']
+            ];
+        } else if(menu === 'Lainnya') {
+            document.getElementById('subtitle-text').innerText = "Akses cepat menu lainnya";
+            btns = [
+                ['article', 'Job Desk Teks Generator', 'link', 'https://poharaayub.github.io/grup-jod-desk-input/'],
+                ['calendar_month', 'Data Schedule & Job Desk', 'link', 'https://drive.google.com/drive/folders/1UyO20_isk-EMRCLpKhwSBI_BYoP2Vy9A'],
+                ['account_balance_wallet', 'Program Uang Kas 2026', 'kas'],
+                ['build', 'Data Peralatan Kerja', 'tools'],
+                ['photo_camera', 'Instagram OCS Indonesia', 'link', 'https://www.instagram.com/ocsindonesia/'],
+                ['collections', 'OCS NFI Gallery 2026', 'link', 'https://drive.google.com/drive/folders/1wtyzi9lhpi7JjY67H76NHGk-qgbOwwd1'],
+                ['info', 'About Apps', 'about']
+            ];
+        }
+
+        content.innerHTML = `<div class="page-padding animate-page"><div class="buttons">${btns.map(b => `<button onclick="handleButtonClick('${b[2]}', '${b[3] || ''}', '${b[1]}')"><span class="material-symbols-rounded">${b[0]}</span><span>${b[1]}</span></button>`).join('')}</div></div>`;
+    }
+
+    function handleButtonClick(action, target, label) {
+        vibrate();
+        if (action === 'link') window.open(target, '_blank');
+        else if (action === 'report') openWebviewSheet(target, label);
+        else if (action === 'members') openMembersSheet();
+        else if (action === 'absen') openAbsenSheet();
+        else if (action === 'kas') openKasSheet();
+        else if (action === 'tools') openToolsSheet();
+        else if (action === 'update') openUpdateSheet();
+        else if (action === 'about') openAboutSheet();
+    }
+
+    function openWebviewSheet(url, title) {
+        const editUrl = url.replace('/preview', '/edit');
+        const html = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><h2>${title}</h2><button class="btn-open-ext" onclick="window.open('${editUrl}','_blank')"><span class="material-symbols-rounded">open_in_new</span></button></div><div class="webview-container"><iframe src="${url}"></iframe></div>`;
+        renderAndShow(html);
+    }
+
+    function openMembersSheet() {
+        const members = [
+            {name: 'Pohara Ayub', role: 'Team Leader', wa: '6289637126728', icon: 'person'},
+            {name: 'Sadulloh', role: 'Team Leader', wa: '6285281587927', icon: 'person'},
+            {name: 'Edi Ahmad Jubaedi', role: 'Anggota', wa: '6285883524329', icon: 'person'},
+            {name: 'Saiful Bahri', role: 'Anggota', wa: '6281389327308', icon: 'person'},
+            {name: 'Wahidin', role: 'Gardener', wa: '6283819602330', icon: 'park'},
+            {name: 'Amrullah', role: 'Anggota', wa: '6283879624040', icon: 'person'},
+            {name: 'Ade Surahman', role: 'Anggota', wa: '6281947172711', icon: 'person'},
+            {name: 'M. Rifai', role: 'Anggota', wa: '6285810611074', icon: 'person'},
+            {name: 'Muhammad Toni', role: 'Anggota', wa: '6281286448626', icon: 'person'},
+            {name: 'Nabrih', role: 'Anggota', wa: '6281295412005', icon: 'person'},
+            {name: 'Sulaiman', role: 'Anggota', wa: '6285716230391', icon: 'person'},
+            {name: 'Siti Maemunah', role: 'Anggota', wa: '6285771090915', icon: 'person'}
+        ];
+        const html = `<h2>Anggota Tim</h2><div class="buttons" style="margin-top:15px">${members.map(m => `<button onclick="window.open('https://wa.me/${m.wa}','_blank')"><span class="material-symbols-rounded">${m.icon}</span><div style="display:flex; flex-direction:column; text-align:left;"><span style="font-weight:700;">${m.name}</span><span style="font-size:11px; opacity:0.6;">${m.role}</span></div></button>`).join('')}</div>`;
+        renderAndShow(html);
+    }
+
+    function openAbsenSheet() { 
+        const pesanIzin = encodeURIComponent("Assalamualaikum, saya ingin mengajukan izin absensi\n\nKeperluan mengajukan izin:\n\nIzin untuk berapa hari:\n\nDemikian terimakasih");
+        renderAndShow(`<h2>Ajukan Izin</h2><div class="buttons" style="margin-top:15px">${generateButtons([['mail','Izin ke pak Ayub',`https://wa.me/6289637126728?text=${pesanIzin}`],['mail','Izin ke pak Sadulloh',`https://wa.me/6285281587927?text=${pesanIzin}`]])}</div>`);
+    }
+
+    function openKasSheet() {
+        const pesanPinjam = encodeURIComponent("Assalamualaikum, saya ingin mengajukan pinjaman uang kas dengan rincian:\n\nJumlah Pinjaman:\nKeperluan Pinjaman:\nRencana Pengembalian:\n\nTerimakasih");
+        renderAndShow(`<h2>Program Uang Kas</h2><div class="buttons" style="margin-top:15px">${generateButtons([['description','Laporan Kas 2026','report_kas'],['attach_money','Ajukan Pinjaman Kas',`https://wa.me/6285281587927?text=${pesanPinjam}`],['gavel','Peraturan Uang Kas','https://docs.google.com/document/d/1pRdzuZYOEsO4gadqvAWk7qT7DMCcA87dlU75tSibAyQ/edit?usp=drivesdk']])}</div>`);
+    }
+
+    function openToolsSheet() {
+        const pk = encodeURIComponent("Assalamualaikum, saya ingin melaporkan kerusakan peralatan/ alat bantu kerja dengan rincian sebagai berikut\n\nNama peralatan:\nKerusakan dibagian:\nKronologi kerusakan:\n\nDemikian terimakasih");
+        const pr = encodeURIComponent("Assalamualaikum, saya ingin request peralatan/ alat bantu kerja dengan rincian sebagai berikut\n\nNama peralatan/ alat bantu kerja:\nJumlah request:\nUntuk digunakan diarea:\n\nDemikian terimakasih");
+        renderAndShow(`<h2>Data Peralatan</h2><div class="buttons" style="margin-top:15px">${generateButtons([['build', 'Cek Data Peralatan', 'report_alat'],['report_problem', 'Lapor Kerusakan Alat', `https://wa.me/6289637126728?text=${pk}`],['add', 'Request Alat Baru', `https://wa.me/6285281587927?text=${pr}`],['local_laundry_service', 'Cek Detergen', 'report_detergen']])}</div>`);
+    }
+
+    function generateButtons(data) {
+        return data.map(b => {
+            let action = `window.open('${b[2]}','_blank')`;
+            if(b[2] === 'report_kas') action = `openWebviewSheet('https://docs.google.com/spreadsheets/d/1mPzw4aiXAvZz0fkyUWAkmzJjCKUgCKRYbDQeUgI95Dk/preview','Laporan Kas')`;
+            if(b[2] === 'report_alat') action = `openWebviewSheet('https://docs.google.com/spreadsheets/d/16F8PvkiDaDY_ZyIfkf0K0eeXwPvDelRSSgAeCl292fk/preview','Data Peralatan')`;
+            if(b[2] === 'report_detergen') action = `openWebviewSheet('https://docs.google.com/spreadsheets/d/11IqbMX3eR3mWIV-i5KZAeFWTb9gNmh1OwDmfqXGLfW8/preview','Pemakaian Detergen')`;
+            return `<button onclick="${action}"><span class="material-symbols-rounded">${b[0]}</span><span>${b[1]}</span></button>`;
+        }).join('');
+    }
+
+    function openUpdateSheet() { renderAndShow(`<h2>Update Laporan</h2><div class="buttons" style="margin-top:15px">${generateButtons([['person','Kirim ke pak Ayub','https://wa.me/6289637126728'],['person','Kirim ke pak Sadulloh','https://wa.me/6285281587927']])}</div>`); }
+    function openAboutSheet() { renderAndShow(`<h2>About Apps</h2><div style="margin-top:15px; color:var(--m3-on-surface-variant);"><p>OCS NFI APPS 26 v2.1.0</p><p>Dev: <b>Pohara Ayub</b></p><br><button onclick="window.open('https://wa.me/6289637126728','_blank')" style="width:100%; padding:14px; border-radius:100px; border:none; background:var(--m3-primary-container); color:var(--m3-on-primary-container); font-weight:700">WhatsApp Developer</button></div>`); }
+    
+    // Fungsi render dimodifikasi untuk push state history
+    function renderAndShow(html) { 
+        document.getElementById('sheetContent').innerHTML = html; 
+        document.getElementById('sheetOverlay').classList.add('show'); 
+        document.getElementById('standardSheet').classList.add('show'); 
+        
+        // Tambahkan dummy state ke browser history
+        window.history.pushState({sheet: 'open'}, "");
+    }
+
+    // Fungsi tutup dimodifikasi agar sinkron dengan history
+    function closeSheet(triggerBack = true) { 
+        document.getElementById('sheetOverlay').classList.remove('show'); 
+        document.getElementById('standardSheet').classList.remove('show'); 
+        
+        // Jika ditutup secara manual (klik overlay), hapus dummy state tadi
+        if(triggerBack && window.history.state && window.history.state.sheet === 'open') {
+            window.history.back();
+        }
+    }
+
+    window.onload = () => { setActive(document.getElementById('default-menu'), 'Beranda'); };
+</script>
+</body>
+</html>
