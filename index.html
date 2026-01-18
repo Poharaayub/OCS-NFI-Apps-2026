@@ -34,6 +34,18 @@
             from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        @keyframes navActive {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes labelFadeUp {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .animate-page { animation: pageIn 0.4s cubic-bezier(0.2, 0, 0, 1) forwards; }
 
         .page-header { flex-shrink: 0; padding: 24px 20px 12px 20px; }
@@ -43,6 +55,16 @@
         .content { flex: 1; overflow-y: auto; scrollbar-width: none; position: relative; }
         .content::-webkit-scrollbar { display: none; }
         .page-padding { padding: 8px 16px 140px 16px; }
+
+        .full-frame-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
+            padding-bottom: 100px;
+        }
+        .full-frame-container iframe {
+            width: 100%; height: 100%; border: none;
+        }
 
         .buttons { display: flex; flex-direction: column; gap: 12px; }
         .buttons button {
@@ -65,11 +87,30 @@
           border-radius: var(--radius-pill); z-index: 1000;
           box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
-        .menu-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: 100%; color: var(--m3-on-surface-variant); cursor: pointer; }
-        .nav-pill { width: 56px; height: 32px; border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .menu-item.active .nav-pill { background: var(--m3-primary); color: var(--m3-on-primary); }
+        .menu-item { 
+          flex: 1; display: flex; flex-direction: column; align-items: center; 
+          justify-content: center; gap: 4px; height: 100%; 
+          color: var(--m3-on-surface-variant); cursor: pointer;
+          transition: color 0.3s ease;
+        }
+        .nav-pill { 
+          width: 56px; height: 32px; border-radius: var(--radius-pill); 
+          display: flex; align-items: center; justify-content: center; 
+          transition: all 0.4s cubic-bezier(0.2, 0, 0, 1); 
+        }
+        
+        .menu-item.active .nav-pill { 
+            background: var(--m3-primary); 
+            color: var(--m3-on-primary); 
+            width: 64px;
+            animation: navActive 0.4s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .menu-item.active .nav-label { 
+            animation: labelFadeUp 0.4s ease-out forwards;
+            color: var(--m3-on-surface);
+        }
         .menu-item.active { color: var(--m3-on-surface); }
-        .nav-label { font-size: 11px; font-weight: 700; }
+        .nav-label { font-size: 11px; font-weight: 700; transition: all 0.3s ease; }
 
         .sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 2000; backdrop-filter: blur(4px); }
         .sheet-overlay.show { display: block; }
@@ -134,6 +175,14 @@
 <script>
     function vibrate() { if(navigator.vibrate) navigator.vibrate(15); }
 
+    // Logika tambahan untuk handle tombol kembali fisik
+    window.addEventListener('popstate', function(event) {
+        const sheet = document.getElementById('standardSheet');
+        if (sheet.classList.contains('show')) {
+            closeSheet(false); // Tutup sheet tanpa memicu history.back lagi
+        }
+    });
+
     function setActive(el, menu) {
         vibrate();
         document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
@@ -145,7 +194,10 @@
 
         if(menu === 'Job Desk') {
             header.style.display = 'none';
-            content.innerHTML = `<div class="animate-page" style="height:100%"><iframe style="position:absolute; inset:0; border:none; width:100%; height:100%;" src="https://poharaayub.github.io/OCS-NFI-Apps-26-Job-Desk/"></iframe></div>`;
+            content.innerHTML = `
+                <div class="full-frame-container animate-page">
+                    <iframe src="https://poharaayub.github.io/OCS-NFI-Apps-26-Job-Desk/"></iframe>
+                </div>`;
             return;
         }
 
@@ -183,7 +235,6 @@
                 ['summarize', 'Rekapitulasi Absensi', 'link', 'https://drive.google.com/drive/folders/1o0sr3Ee6r4VOCGT_a-1dTJ-KVZ0GMX-J'],
                 ['mail', 'Ajukan Izin Absensi', 'absen'],
                 ['swap_horiz', 'Ajukan Tukar Shift', 'link', `https://wa.me/6289637126728?text=${pesanTukar}`],
-                // PENILAIAN KARYAWAN SEKARANG PAKAI 'report' UNTUK WEBVIEW
                 ['assignment', 'Penilaian Karyawan', 'report', 'https://docs.google.com/spreadsheets/d/1o3yFehBFjD7SDgmJqRqlbl36nv77uS8EiqUVMLoc3DA/preview'],
                 ['warning', 'Surat Peringatan (SP)', 'link', 'https://drive.google.com/drive/folders/10JcMB3LGNLOL84YjRa2R-Fp7toZR_v2y']
             ];
@@ -268,8 +319,27 @@
 
     function openUpdateSheet() { renderAndShow(`<h2>Update Laporan</h2><div class="buttons" style="margin-top:15px">${generateButtons([['person','Kirim ke pak Ayub','https://wa.me/6289637126728'],['person','Kirim ke pak Sadulloh','https://wa.me/6285281587927']])}</div>`); }
     function openAboutSheet() { renderAndShow(`<h2>About Apps</h2><div style="margin-top:15px; color:var(--m3-on-surface-variant);"><p>OCS NFI APPS 26 v2.1.0</p><p>Dev: <b>Pohara Ayub</b></p><br><button onclick="window.open('https://wa.me/6289637126728','_blank')" style="width:100%; padding:14px; border-radius:100px; border:none; background:var(--m3-primary-container); color:var(--m3-on-primary-container); font-weight:700">WhatsApp Developer</button></div>`); }
-    function renderAndShow(html) { document.getElementById('sheetContent').innerHTML = html; document.getElementById('sheetOverlay').classList.add('show'); document.getElementById('standardSheet').classList.add('show'); }
-    function closeSheet() { document.getElementById('sheetOverlay').classList.remove('show'); document.getElementById('standardSheet').classList.remove('show'); }
+    
+    // Fungsi render dimodifikasi untuk push state history
+    function renderAndShow(html) { 
+        document.getElementById('sheetContent').innerHTML = html; 
+        document.getElementById('sheetOverlay').classList.add('show'); 
+        document.getElementById('standardSheet').classList.add('show'); 
+        
+        // Tambahkan dummy state ke browser history
+        window.history.pushState({sheet: 'open'}, "");
+    }
+
+    // Fungsi tutup dimodifikasi agar sinkron dengan history
+    function closeSheet(triggerBack = true) { 
+        document.getElementById('sheetOverlay').classList.remove('show'); 
+        document.getElementById('standardSheet').classList.remove('show'); 
+        
+        // Jika ditutup secara manual (klik overlay), hapus dummy state tadi
+        if(triggerBack && window.history.state && window.history.state.sheet === 'open') {
+            window.history.back();
+        }
+    }
 
     window.onload = () => { setActive(document.getElementById('default-menu'), 'Beranda'); };
 </script>
