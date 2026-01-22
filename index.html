@@ -82,10 +82,10 @@
             top: 0; 
             left: 0; 
             width: 100%; 
-            /* Menyesuaikan tinggi agar tidak tertutup bottom bar */
-            height: calc(100% - 90px - env(safe-area-inset-bottom));
+            /* Menyesuaikan tinggi agar pas dengan bottom bar yang tidak floating */
+            height: calc(100% - 80px - env(safe-area-inset-bottom));
             border: none;
-            background: #fff; /* Memberikan background putih agar iframe bersih */
+            background: #fff;
         }
         .full-frame-container iframe { 
             width: 100%; 
@@ -111,25 +111,25 @@
           border-radius: 12px; flex-shrink: 0; font-size: 22px;
         }
 
-        /* Floating Bottom Bar */
+        /* Fixed Bottom Bar (Non-Floating) */
         .bottom-nav-container {
           position: fixed;
-          bottom: calc(12px + env(safe-area-inset-bottom));
-          left: 16px;
-          right: 16px;
+          bottom: 0;
+          left: 0;
+          right: 0;
           z-index: 1000;
+          background: rgba(26, 30, 24, 0.98);
+          backdrop-filter: blur(10px);
+          border-top: 1px solid var(--m3-outline-variant);
+          /* Menangani padding bawah untuk layar dengan notch bawah/safe area */
+          padding-bottom: env(safe-area-inset-bottom);
         }
 
         .bottom-bar {
-          height: 72px; 
-          background: rgba(26, 30, 24, 0.98);
+          height: 80px; 
           display: flex; 
           align-items: center;
           justify-content: space-around;
-          border-radius: 24px;
-          border: 1px solid var(--m3-outline-variant);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-          backdrop-filter: blur(10px);
         }
         
         .menu-item { 
@@ -138,14 +138,14 @@
           flex-direction: column; 
           align-items: center; 
           justify-content: center;
-          gap: 2px;
+          gap: 4px;
           height: 100%; 
           color: var(--m3-on-surface-variant); 
           cursor: pointer;
         }
         
         .nav-icon-wrapper {
-          width: 52px; height: 28px; border-radius: 14px;
+          width: 64px; height: 32px; border-radius: 16px;
           display: flex; align-items: center; justify-content: center;
           transition: background 0.3s var(--m3-transition), color 0.3s ease;
           overflow: hidden;
@@ -157,7 +157,7 @@
           color: var(--m3-primary);
         }
 
-        .nav-label { font-size: 10px; font-weight: 600; transition: color 0.3s ease; }
+        .nav-label { font-size: 11px; font-weight: 600; transition: color 0.3s ease; }
 
         /* Bottom Sheet */
         .sheet-overlay { 
@@ -271,15 +271,13 @@
         const content = document.getElementById('main-content');
         const header = document.getElementById('header-ui');
         
-        // Reset animation and scroll
         content.classList.remove('animate-page');
-        void content.offsetWidth; // Trigger reflow
+        void content.offsetWidth;
         content.scrollTop = 0;
 
         let innerHTML = '';
 
         if(menu === 'Job Desk') {
-            // Sembunyikan header UI agar webview full
             header.style.opacity = '0';
             header.style.pointerEvents = 'none';
             header.style.height = '0';
@@ -291,7 +289,6 @@
                     <iframe src="https://poharaayub.github.io/OCS-NFI-Apps-26-Job-Desk/"></iframe>
                 </div>`;
         } else {
-            // Tampilkan kembali header UI
             header.style.opacity = '1';
             header.style.pointerEvents = 'auto';
             header.style.height = 'auto';
@@ -345,7 +342,6 @@
             innerHTML = `<div class="page-padding"><div class="buttons">${btns.map(b => `<button onclick="handleButtonClick('${b[2]}', '${b[3] || ''}', '${b[1]}')"><span class="material-symbols-rounded">${b[0]}</span><span>${b[1]}</span></button>`).join('')}</div></div>`;
         }
 
-        // Apply content and trigger animation
         content.innerHTML = innerHTML;
         requestAnimationFrame(() => {
             content.classList.add('animate-page');
