@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>OCS NFI APPS 26 - Animated UI</title>
+    <title>OCS NFI APPS 26 - Ungu M3</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     
     <style>
         :root {
-          --m3-surface: #0E110D;
-          --m3-surface-container: #1A1E18;
-          --m3-primary: #B5CCBA;
-          --m3-on-primary: #1F3524;
-          --m3-primary-container: #3B4D3F;
-          --m3-on-primary-container: #D1E8D6;
-          --m3-secondary-container: #333B34;
-          --m3-on-surface: #E0E4DB;
-          --m3-on-surface-variant: #B0B7A9;
-          --m3-outline-variant: rgba(255, 255, 255, 0.06);
+          /* M3 Dark Theme Purple Palette */
+          --m3-surface: #1C1B1F;
+          --m3-surface-container: #2B2930;
+          --m3-primary: #D0BCFF; /* Light Purple */
+          --m3-on-primary: #381E72; /* Dark Purple */
+          --m3-primary-container: #4F378B;
+          --m3-on-primary-container: #EADDFF;
+          --m3-secondary-container: #4A4458;
+          --m3-on-surface: #E6E1E5;
+          --m3-on-surface-variant: #CAC4D0;
+          --m3-outline-variant: rgba(255, 255, 255, 0.08);
           --m3-transition: cubic-bezier(0.2, 0, 0, 1);
         }
 
@@ -64,6 +65,7 @@
           font-size: 26px; 
           font-weight: 700; 
           letter-spacing: -0.5px;
+          color: var(--m3-primary);
         }
 
         .content { 
@@ -76,14 +78,12 @@
         .content::-webkit-scrollbar { display: none; }
         .page-padding { padding: 8px 20px 140px 20px; }
 
-        /* Full Frame for Job Desk Page */
         .full-frame-container {
             position: absolute;
             top: 0; 
             left: 0; 
             width: 100%; 
-            /* Menyesuaikan tinggi agar pas dengan bottom bar yang tidak floating */
-            height: calc(100% - 80px - env(safe-area-inset-bottom));
+            height: calc(100% - 90px - env(safe-area-inset-bottom));
             border: none;
             background: #fff;
         }
@@ -111,25 +111,25 @@
           border-radius: 12px; flex-shrink: 0; font-size: 22px;
         }
 
-        /* Fixed Bottom Bar (Non-Floating) */
+        /* Floating Bottom Bar */
         .bottom-nav-container {
           position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
+          bottom: calc(12px + env(safe-area-inset-bottom));
+          left: 16px;
+          right: 16px;
           z-index: 1000;
-          background: rgba(26, 30, 24, 0.98);
-          backdrop-filter: blur(10px);
-          border-top: 1px solid var(--m3-outline-variant);
-          /* Menangani padding bawah untuk layar dengan notch bawah/safe area */
-          padding-bottom: env(safe-area-inset-bottom);
         }
 
         .bottom-bar {
-          height: 80px; 
+          height: 72px; 
+          background: rgba(43, 41, 48, 0.98);
           display: flex; 
           align-items: center;
           justify-content: space-around;
+          border-radius: 24px;
+          border: 1px solid var(--m3-outline-variant);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(12px);
         }
         
         .menu-item { 
@@ -138,14 +138,14 @@
           flex-direction: column; 
           align-items: center; 
           justify-content: center;
-          gap: 4px;
+          gap: 2px;
           height: 100%; 
           color: var(--m3-on-surface-variant); 
           cursor: pointer;
         }
         
         .nav-icon-wrapper {
-          width: 64px; height: 32px; border-radius: 16px;
+          width: 52px; height: 28px; border-radius: 14px;
           display: flex; align-items: center; justify-content: center;
           transition: background 0.3s var(--m3-transition), color 0.3s ease;
           overflow: hidden;
@@ -154,15 +154,15 @@
         .menu-item.active { color: var(--m3-on-surface); }
         .menu-item.active .nav-icon-wrapper { 
           background: var(--m3-primary-container);
-          color: var(--m3-primary);
+          color: var(--m3-on-primary-container);
         }
 
-        .nav-label { font-size: 11px; font-weight: 600; transition: color 0.3s ease; }
+        .nav-label { font-size: 10px; font-weight: 600; transition: color 0.3s ease; }
 
         /* Bottom Sheet */
         .sheet-overlay { 
             position: fixed; inset: 0; 
-            background: rgba(0,0,0,0.7); 
+            background: rgba(0,0,0,0.8); 
             opacity: 0; visibility: hidden;
             transition: opacity 0.3s ease;
             z-index: 2000; 
@@ -182,11 +182,12 @@
             transform: translateY(100%);
             transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
             will-change: transform;
+            border-top: 1px solid var(--m3-outline-variant);
         }
         .bottom-sheet.show { transform: translateY(0); }
         
         .sheet-handle-area { width: 100%; padding: 14px 0; flex-shrink: 0; }
-        .sheet-handle { width: 32px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 0 auto; }
+        .sheet-handle { width: 32px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 2px; margin: 0 auto; }
         
         .sheet-header { padding: 0 24px 16px 24px; flex-shrink: 0; text-align: left; }
 
@@ -272,7 +273,7 @@
         const header = document.getElementById('header-ui');
         
         content.classList.remove('animate-page');
-        void content.offsetWidth;
+        void content.offsetWidth; 
         content.scrollTop = 0;
 
         let innerHTML = '';
